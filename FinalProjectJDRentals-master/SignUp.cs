@@ -4,11 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 
 namespace FinalProject
 {
@@ -37,12 +38,19 @@ namespace FinalProject
 
         private void btn_Browse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
-            if (open.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                pictureBoxPhoto.Image = new Bitmap(open.FileName);
-                pictureBoxPhoto.Tag = open.FileName;
+                ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
+                ofd.Title = "Select Profile Picture";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    pictureBoxPhoto.Image?.Dispose();
+                    pictureBoxPhoto.Image = Image.FromFile(ofd.FileName);
+                    pictureBoxPhoto.SizeMode = PictureBoxSizeMode.Zoom;
+
+                    pictureBoxPhoto.Tag = ofd.FileName;
+                }
             }
         }
 
@@ -81,6 +89,33 @@ namespace FinalProject
                 return;
             }
 
+            string finalImagePath = "";
+            if (pictureBoxPhoto.Tag != null && !string.IsNullOrWhiteSpace(pictureBoxPhoto.Tag.ToString()))
+            {
+                try
+                {
+                    string sourcePath = pictureBoxPhoto.Tag.ToString();
+                    string appDir = AppDomain.CurrentDomain.BaseDirectory;
+                    string uploadFolder = Path.Combine(appDir, "UserProfiles");
+
+                    if (!Directory.Exists(uploadFolder))
+                    {
+                        Directory.CreateDirectory(uploadFolder);
+                    }
+
+                    string fileExtension = Path.GetExtension(sourcePath);
+                    string uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+                    finalImagePath = Path.Combine(uploadFolder, uniqueFileName);
+
+                    File.Copy(sourcePath, finalImagePath, true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Profile picture file processing failed: " + ex.Message);
+                    return;
+                }
+            }
+
             string connString = "Server=.\\SQLEXPRESS; Database=FinalProjectJDRENTALS; Trusted_Connection=True; TrustServerCertificate=True;";
 
             using (SqlConnection conn = new SqlConnection(connString))
@@ -113,7 +148,7 @@ namespace FinalProject
                     cmd.Parameters.AddWithValue("@last", txtLastName.Text.Trim());
                     cmd.Parameters.AddWithValue("@gender", rbMale.Checked ? "Male" : rbFemale.Checked ? "Female" : "Other");
                     cmd.Parameters.AddWithValue("@birth", dtpBirthday.Value);
-                    cmd.Parameters.AddWithValue("@img", pictureBoxPhoto.Tag?.ToString() ?? "");
+                    cmd.Parameters.AddWithValue("@img", finalImagePath);
 
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Account Created Successfully!");

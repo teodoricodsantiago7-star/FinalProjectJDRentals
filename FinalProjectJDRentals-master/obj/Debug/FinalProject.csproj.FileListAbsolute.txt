@@ -26,7 +26,6 @@ C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\o
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.Booking_Management.resources
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.Calendar.resources
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.Customer_Records.resources
-C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.DashBoard1.resources
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.ForgotPassword.resources
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.Inventory_Management.resources
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.Logo.resources
@@ -40,3 +39,4 @@ C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\o
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.csproj.CoreCompileInputs.cache
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.exe
 C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.pdb
+C:\Users\erick\source\repos\FinalProjectJDRentals\FinalProjectJDRentals-master\obj\Debug\FinalProject.DashBoard1.resources

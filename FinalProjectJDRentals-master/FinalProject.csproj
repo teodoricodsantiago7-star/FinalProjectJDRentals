@@ -65,11 +65,11 @@
     <Compile Include="Customer Records.Designer.cs">
       <DependentUpon>Customer Records.cs</DependentUpon>
     </Compile>
-    <Compile Include="DashBoard1.cs">
+    <Compile Include="DashBoardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DashBoard1.Designer.cs">
-      <DependentUpon>DashBoard1.cs</DependentUpon>
+    <Compile Include="DashBoardForm.Designer.cs">
+      <DependentUpon>DashBoardForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ForgotPassword.cs">
       <SubType>Form</SubType>
@@ -130,8 +130,8 @@
     <EmbeddedResource Include="Customer Records.resx">
       <DependentUpon>Customer Records.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DashBoard1.resx">
-      <DependentUpon>DashBoard1.cs</DependentUpon>
+    <EmbeddedResource Include="DashBoardForm.resx">
+      <DependentUpon>DashBoardForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ForgotPassword.resx">
       <DependentUpon>ForgotPassword.cs</DependentUpon>
