@@ -230,33 +230,36 @@ namespace FinalProject
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            string placeholder = "e.g. Abc@1234";
-            if (checkBox2.Checked)
-            {
-                txtPassword.PasswordChar = '\0';
-                txtConfirmPassword.PasswordChar = '\0';
-            }
-            else
-            {
-                if (txtPassword.Text.Trim() == placeholder || string.IsNullOrWhiteSpace(txtPassword.Text))
-                {
-                    txtPassword.PasswordChar = '\0';
-                }
-                else
-                {
-                    txtPassword.PasswordChar = '*';
-                }
-                if (txtConfirmPassword.Text.Trim() == placeholder || string.IsNullOrWhiteSpace(txtConfirmPassword.Text))
-                {
-                    txtConfirmPassword.PasswordChar = '\0';
-                }
-                else
-                {
-                    txtConfirmPassword.PasswordChar = '*';
-                }
-            }
+            UpdatePasswordMasking();
         }
 
+        private void txtPassword_TextChanged(object sender, EventArgs e)
+        {
+            UpdatePasswordMasking();
+        }
+
+        private void txtConfirmPassword_TextChanged(object sender, EventArgs e)
+        {
+            UpdatePasswordMasking();
+        }
+
+        private void UpdatePasswordMasking()
+        {
+            string placeholder = "e.g. Abc@1234";
+
+            char GetMaskChar(TextBox textBox)
+            {
+                if (checkBox2.Checked) return '\0';
+
+                string text = textBox.Text.Trim();
+                if (text == placeholder || string.IsNullOrWhiteSpace(text)) return '\0';
+
+                return '*';
+            }
+
+            txtPassword.PasswordChar = GetMaskChar(txtPassword);
+            txtConfirmPassword.PasswordChar = GetMaskChar(txtConfirmPassword);
+        }
 
     }
 }
