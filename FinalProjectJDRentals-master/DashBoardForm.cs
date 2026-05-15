@@ -294,6 +294,41 @@ namespace FinalProject
             chart1.Invalidate();
             chart1.Update();
         }
+        private void btnCalendar_Click(object sender, EventArgs e)
+        {
+            if (chart1 != null && chart1.Series.Count > 0)
+            {
+                chart1.Series["Series1"].Points.Clear();
+            }
+
+            if (pbProfilePic != null && pbProfilePic.Image != null)
+            {
+                pbProfilePic.Image.Dispose();
+                pbProfilePic.Image = null;
+            }
+
+            this.Hide();
+            Calendar calendarForm = new Calendar(this.currentLoggedInUserId);
+            calendarForm.Show();
+        }
+
+        private void btnInventoryManagement_Click(object sender, EventArgs e)
+        {
+            if (chart1 != null && chart1.Series.Count > 0)
+            {
+                chart1.Series["Series1"].Points.Clear();
+            }
+
+            if (pbProfilePic != null && pbProfilePic.Image != null)
+            {
+                pbProfilePic.Image.Dispose();
+                pbProfilePic.Image = null;
+            }
+            this.Hide();
+            Inventory_Management inventoryForm = new Inventory_Management(this.currentLoggedInUserId);
+            inventoryForm.Show();
+        }
+
     }
 
     public class DashboardMetrics
@@ -310,4 +345,5 @@ namespace FinalProject
         public string FullName { get; set; }
         public Dictionary<int, double> DailySalesData { get; set; } = new Dictionary<int, double>();
     }
+
 }

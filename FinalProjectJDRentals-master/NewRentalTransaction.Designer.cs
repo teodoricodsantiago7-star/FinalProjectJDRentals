@@ -32,8 +32,8 @@
             this.RefreshButton = new System.Windows.Forms.Button();
             this.pbUserImage = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.txtNotes = new System.Windows.Forms.TextBox();
             this.rbGCash = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -97,8 +97,8 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
-            this.button13 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
+            this.btnCalendar = new System.Windows.Forms.Button();
+            this.btnInventoryManagement = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.btnHome = new System.Windows.Forms.Button();
             this.UserNameHeader = new System.Windows.Forms.Label();
@@ -153,8 +153,8 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Controls.Add(this.button4);
-            this.panel2.Controls.Add(this.button3);
+            this.panel2.Controls.Add(this.btnCancel);
+            this.panel2.Controls.Add(this.btnSave);
             this.panel2.Controls.Add(this.txtNotes);
             this.panel2.Controls.Add(this.rbGCash);
             this.panel2.Controls.Add(this.radioButton2);
@@ -194,31 +194,33 @@
             this.panel2.Size = new System.Drawing.Size(500, 400);
             this.panel2.TabIndex = 65;
             // 
-            // button4
+            // btnCancel
             // 
-            this.button4.BackColor = System.Drawing.Color.Sienna;
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button4.Location = new System.Drawing.Point(407, 366);
-            this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(78, 26);
-            this.button4.TabIndex = 100;
-            this.button4.Text = "Cancel";
-            this.button4.UseVisualStyleBackColor = false;
+            this.btnCancel.BackColor = System.Drawing.Color.Sienna;
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnCancel.Location = new System.Drawing.Point(407, 366);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(78, 26);
+            this.btnCancel.TabIndex = 100;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // button3
+            // btnSave
             // 
-            this.button3.BackColor = System.Drawing.Color.Sienna;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button3.Location = new System.Drawing.Point(324, 366);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(78, 26);
-            this.button3.TabIndex = 99;
-            this.button3.Text = "Save";
-            this.button3.UseVisualStyleBackColor = false;
+            this.btnSave.BackColor = System.Drawing.Color.Sienna;
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnSave.Location = new System.Drawing.Point(324, 366);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(78, 26);
+            this.btnSave.TabIndex = 99;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // txtNotes
             // 
@@ -380,6 +382,7 @@
             this.btnSearch.TabIndex = 83;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // cmbCustomerName
             // 
@@ -890,8 +893,8 @@
             this.panel1.Controls.Add(this.button8);
             this.panel1.Controls.Add(this.button11);
             this.panel1.Controls.Add(this.button12);
-            this.panel1.Controls.Add(this.button13);
-            this.panel1.Controls.Add(this.button14);
+            this.panel1.Controls.Add(this.btnCalendar);
+            this.panel1.Controls.Add(this.btnInventoryManagement);
             this.panel1.Controls.Add(this.button15);
             this.panel1.Controls.Add(this.btnHome);
             this.panel1.Controls.Add(this.pictureBox1);
@@ -982,37 +985,39 @@
             this.button12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button12.UseVisualStyleBackColor = false;
             // 
-            // button13
+            // btnCalendar
             // 
-            this.button13.BackColor = System.Drawing.Color.Sienna;
-            this.button13.FlatAppearance.BorderSize = 0;
-            this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button13.ForeColor = System.Drawing.SystemColors.InactiveBorder;
-            this.button13.Location = new System.Drawing.Point(-1, 215);
-            this.button13.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(191, 28);
-            this.button13.TabIndex = 78;
-            this.button13.Text = "  Calendar";
-            this.button13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button13.UseVisualStyleBackColor = false;
+            this.btnCalendar.BackColor = System.Drawing.Color.Sienna;
+            this.btnCalendar.FlatAppearance.BorderSize = 0;
+            this.btnCalendar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCalendar.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnCalendar.Location = new System.Drawing.Point(-1, 215);
+            this.btnCalendar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCalendar.Name = "btnCalendar";
+            this.btnCalendar.Size = new System.Drawing.Size(191, 28);
+            this.btnCalendar.TabIndex = 78;
+            this.btnCalendar.Text = "  Calendar";
+            this.btnCalendar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCalendar.UseVisualStyleBackColor = false;
+            this.btnCalendar.Click += new System.EventHandler(this.btnCalendar_Click);
             // 
-            // button14
+            // btnInventoryManagement
             // 
-            this.button14.BackColor = System.Drawing.Color.Sienna;
-            this.button14.FlatAppearance.BorderSize = 0;
-            this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button14.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button14.Location = new System.Drawing.Point(-3, 243);
-            this.button14.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(191, 28);
-            this.button14.TabIndex = 77;
-            this.button14.Text = "  Inventory Management";
-            this.button14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button14.UseVisualStyleBackColor = false;
+            this.btnInventoryManagement.BackColor = System.Drawing.Color.Sienna;
+            this.btnInventoryManagement.FlatAppearance.BorderSize = 0;
+            this.btnInventoryManagement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInventoryManagement.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnInventoryManagement.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnInventoryManagement.Location = new System.Drawing.Point(-3, 243);
+            this.btnInventoryManagement.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnInventoryManagement.Name = "btnInventoryManagement";
+            this.btnInventoryManagement.Size = new System.Drawing.Size(191, 28);
+            this.btnInventoryManagement.TabIndex = 77;
+            this.btnInventoryManagement.Text = "  Inventory Management";
+            this.btnInventoryManagement.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnInventoryManagement.UseVisualStyleBackColor = false;
+            this.btnInventoryManagement.Click += new System.EventHandler(this.btnInventoryManagement_Click);
             // 
             // button15
             // 
@@ -1147,8 +1152,8 @@
         private System.Windows.Forms.TextBox txtBalanceDue;
         private System.Windows.Forms.NumericUpDown numDeposit;
         private System.Windows.Forms.TextBox txtSubTotal;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.TextBox txtNotes;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.DataGridView dgvAccountRoles;
@@ -1171,8 +1176,8 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button12;
-        private System.Windows.Forms.Button button13;
-        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button btnCalendar;
+        private System.Windows.Forms.Button btnInventoryManagement;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Button btnHome;
         private System.Windows.Forms.Label lblTotalActiveRents;

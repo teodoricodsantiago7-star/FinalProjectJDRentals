@@ -39,8 +39,8 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
-            this.button13 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
+            this.btnCalendar = new System.Windows.Forms.Button();
+            this.btnInventoryManagement = new System.Windows.Forms.Button();
             this.btnNewRentalTransaction = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -56,6 +56,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblOngoingRentalsVal = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.lblUpcomingBookingsVal = new System.Windows.Forms.Label();
@@ -75,7 +76,6 @@
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.pbProfilePic = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.UserNameHeader = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
@@ -125,8 +125,8 @@
             this.panel1.Controls.Add(this.button8);
             this.panel1.Controls.Add(this.button11);
             this.panel1.Controls.Add(this.button12);
-            this.panel1.Controls.Add(this.button13);
-            this.panel1.Controls.Add(this.button14);
+            this.panel1.Controls.Add(this.btnCalendar);
+            this.panel1.Controls.Add(this.btnInventoryManagement);
             this.panel1.Controls.Add(this.btnNewRentalTransaction);
             this.panel1.Controls.Add(this.button16);
             this.panel1.Controls.Add(this.pictureBox1);
@@ -217,37 +217,39 @@
             this.button12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button12.UseVisualStyleBackColor = false;
             // 
-            // button13
+            // btnCalendar
             // 
-            this.button13.BackColor = System.Drawing.Color.Sienna;
-            this.button13.FlatAppearance.BorderSize = 0;
-            this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button13.ForeColor = System.Drawing.SystemColors.InactiveBorder;
-            this.button13.Location = new System.Drawing.Point(-1, 215);
-            this.button13.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(191, 28);
-            this.button13.TabIndex = 78;
-            this.button13.Text = "  Calendar";
-            this.button13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button13.UseVisualStyleBackColor = false;
+            this.btnCalendar.BackColor = System.Drawing.Color.Sienna;
+            this.btnCalendar.FlatAppearance.BorderSize = 0;
+            this.btnCalendar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCalendar.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnCalendar.Location = new System.Drawing.Point(-1, 215);
+            this.btnCalendar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCalendar.Name = "btnCalendar";
+            this.btnCalendar.Size = new System.Drawing.Size(191, 28);
+            this.btnCalendar.TabIndex = 78;
+            this.btnCalendar.Text = "  Calendar";
+            this.btnCalendar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCalendar.UseVisualStyleBackColor = false;
+            this.btnCalendar.Click += new System.EventHandler(this.btnCalendar_Click);
             // 
-            // button14
+            // btnInventoryManagement
             // 
-            this.button14.BackColor = System.Drawing.Color.Sienna;
-            this.button14.FlatAppearance.BorderSize = 0;
-            this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button14.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button14.Location = new System.Drawing.Point(-3, 243);
-            this.button14.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(191, 28);
-            this.button14.TabIndex = 77;
-            this.button14.Text = "  Inventory Management";
-            this.button14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button14.UseVisualStyleBackColor = false;
+            this.btnInventoryManagement.BackColor = System.Drawing.Color.Sienna;
+            this.btnInventoryManagement.FlatAppearance.BorderSize = 0;
+            this.btnInventoryManagement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInventoryManagement.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnInventoryManagement.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnInventoryManagement.Location = new System.Drawing.Point(-3, 243);
+            this.btnInventoryManagement.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnInventoryManagement.Name = "btnInventoryManagement";
+            this.btnInventoryManagement.Size = new System.Drawing.Size(191, 28);
+            this.btnInventoryManagement.TabIndex = 77;
+            this.btnInventoryManagement.Text = "  Inventory Management";
+            this.btnInventoryManagement.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnInventoryManagement.UseVisualStyleBackColor = false;
+            this.btnInventoryManagement.Click += new System.EventHandler(this.btnInventoryManagement_Click);
             // 
             // btnNewRentalTransaction
             // 
@@ -418,6 +420,16 @@
             this.lblOngoingRentalsVal.Size = new System.Drawing.Size(17, 18);
             this.lblOngoingRentalsVal.TabIndex = 43;
             this.lblOngoingRentalsVal.Text = "0";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(55, 4);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(122, 18);
+            this.label10.TabIndex = 42;
+            this.label10.Text = "Ongoing Rentals:";
             // 
             // panel6
             // 
@@ -642,16 +654,6 @@
             this.pbProfilePic.TabIndex = 30;
             this.pbProfilePic.TabStop = false;
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(55, 4);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(122, 18);
-            this.label10.TabIndex = 42;
-            this.label10.Text = "Ongoing Rentals:";
-            // 
             // UserNameHeader
             // 
             this.UserNameHeader.AutoSize = true;
@@ -756,8 +758,8 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button12;
-        private System.Windows.Forms.Button button13;
-        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button btnCalendar;
+        private System.Windows.Forms.Button btnInventoryManagement;
         private System.Windows.Forms.Button btnNewRentalTransaction;
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.Label label10;

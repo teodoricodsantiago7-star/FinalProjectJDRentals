@@ -53,7 +53,11 @@ namespace FinalProject
                                     if (!string.IsNullOrWhiteSpace(imagePath) && File.Exists(imagePath))
                                     {
                                         pbUserImage.Image?.Dispose();
-                                        pbUserImage.Image = Image.FromFile(imagePath);
+                                        byte[] bytes = File.ReadAllBytes(imagePath);
+                                        using (MemoryStream ms = new MemoryStream(bytes))
+                                        {
+                                            pbUserImage.Image = Image.FromStream(ms);
+                                        }
                                         pbUserImage.SizeMode = PictureBoxSizeMode.Zoom;
                                     }
                                 }
@@ -74,6 +78,12 @@ namespace FinalProject
             LoadInventoryItems();
             ResetInputFields();
 
+            dtpStartDate.Format = DateTimePickerFormat.Short;
+            dtpStartDate.ShowUpDown = false;
+
+            dtpExpectedReturnDate.Format = DateTimePickerFormat.Short;
+            dtpExpectedReturnDate.ShowUpDown = false;
+
             dtpStartTime.Format = DateTimePickerFormat.Time;
             dtpStartTime.ShowUpDown = true;
 
@@ -83,6 +93,42 @@ namespace FinalProject
             txtDailyRate.ReadOnly = true;
             txtSubTotal.ReadOnly = true;
             txtBalanceDue.ReadOnly = true;
+
+            WireUpCalculationEvents();
+        }
+
+        private void WireUpCalculationEvents()
+        {
+            if (cmbItem != null)
+            {
+                cmbItem.SelectedIndexChanged -= cmbItem_SelectedIndexChanged;
+                cmbItem.SelectedIndexChanged += cmbItem_SelectedIndexChanged;
+                cmbItem.SelectedValueChanged -= cmbItem_SelectedIndexChanged;
+                cmbItem.SelectedValueChanged += cmbItem_SelectedIndexChanged;
+            }
+
+            if (numQuantity != null)
+            {
+                numQuantity.ValueChanged -= numQuantity_ValueChanged;
+                numQuantity.ValueChanged += numQuantity_ValueChanged;
+            }
+
+            if (numDeposit != null)
+            {
+                numDeposit.ValueChanged -= (s, e) => CalculateBalance();
+                numDeposit.ValueChanged += (s, e) => CalculateBalance();
+            }
+
+            if (txtAmountPaid != null)
+            {
+                txtAmountPaid.TextChanged -= txtAmountPaid_TextChanged;
+                txtAmountPaid.TextChanged += txtAmountPaid_TextChanged;
+            }
+
+            if (dtpStartDate != null) dtpStartDate.ValueChanged += (s, e) => CalculateTotals();
+            if (dtpStartTime != null) dtpStartTime.ValueChanged += (s, e) => CalculateTotals();
+            if (dtpExpectedReturnDate != null) dtpExpectedReturnDate.ValueChanged += (s, e) => CalculateTotals();
+            if (dtpExpectedReturnTime != null) dtpExpectedReturnTime.ValueChanged += (s, e) => CalculateTotals();
         }
 
         private void RefreshSummaryPanels()
@@ -125,17 +171,27 @@ namespace FinalProject
                 {
                     conn.Open();
 
-                    string logQuery = "SELECT TOP 10 ActionTime AS [Date], ActionType AS [Time], Description FROM AuditLog ORDER BY LogID DESC;";
+                    string logQuery = "SELECT CAST(ActionTime AS DATE) AS [Date], CONVERT(VARCHAR(8), ActionTime, 108) AS [Time], Description FROM AuditLog ORDER BY LogID DESC;";
                     SqlDataAdapter logAdapter = new SqlDataAdapter(logQuery, conn);
                     DataTable logTable = new DataTable();
                     logAdapter.Fill(logTable);
-                    if (dgvSystemLogs != null) dgvSystemLogs.DataSource = logTable;
+
+                    if (dgvSystemLogs != null)
+                    {
+                        dgvSystemLogs.AutoGenerateColumns = true;
+                        dgvSystemLogs.DataSource = logTable;
+                    }
 
                     string userQuery = "SELECT FullName AS [Account Name], Role AS [Account Role] FROM Users WHERE Status = 'Active';";
                     SqlDataAdapter userAdapter = new SqlDataAdapter(userQuery, conn);
                     DataTable userTable = new DataTable();
                     userAdapter.Fill(userTable);
-                    if (dgvAccountRoles != null) dgvAccountRoles.DataSource = userTable;
+
+                    if (dgvAccountRoles != null)
+                    {
+                        dgvAccountRoles.AutoGenerateColumns = true;
+                        dgvAccountRoles.DataSource = userTable;
+                    }
                 }
                 catch
                 {
@@ -214,6 +270,14 @@ namespace FinalProject
 
         private void cmbItem_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cmbItem == null || cmbItem.SelectedIndex == -1 || cmbItem.SelectedValue == null)
+            {
+                txtDailyRate.Text = "0.00";
+                txtSubTotal.Text = "0.00";
+                CalculateBalance();
+                return;
+            }
+
             CalculateTotals();
         }
 
@@ -249,36 +313,54 @@ namespace FinalProject
 
         private DateTime GetCombinedStartDateTime()
         {
+            if (dtpStartDate == null || dtpStartTime == null) return DateTime.Now;
+
             DateTime datePart = dtpStartDate.Value.Date;
             TimeSpan timePart = dtpStartTime.Value.TimeOfDay;
+
             return datePart.Add(timePart);
         }
 
         private DateTime GetCombinedEndDateTime()
         {
+            if (dtpExpectedReturnDate == null || dtpExpectedReturnTime == null) return DateTime.Now.AddDays(1);
+
             DateTime datePart = dtpExpectedReturnDate.Value.Date;
             TimeSpan timePart = dtpExpectedReturnTime.Value.TimeOfDay;
+
             return datePart.Add(timePart);
         }
 
         private void CalculateTotals()
         {
-            if (cmbItem.SelectedIndex == -1 || cmbItem.SelectedValue == null) return;
+            if (cmbItem == null || cmbItem.SelectedIndex == -1 || cmbItem.SelectedValue == null)
+            {
+                if (txtDailyRate != null) txtDailyRate.Text = "0.00";
+                if (txtSubTotal != null) txtSubTotal.Text = "0.00";
+                CalculateBalance();
+                return;
+            }
+
             if (!int.TryParse(cmbItem.SelectedValue.ToString(), out int itemId)) return;
 
-            if (itemRates.TryGetValue(itemId, out decimal dailyRate))
+            if (itemRates != null && itemRates.TryGetValue(itemId, out decimal dailyRate))
             {
                 txtDailyRate.Text = dailyRate.ToString("F2");
 
-                int qty = (int)numQuantity.Value;
+                int qty = numQuantity != null ? (int)numQuantity.Value : 1;
                 DateTime start = GetCombinedStartDateTime();
                 DateTime end = GetCombinedEndDateTime();
 
-                int days = (end.Date - start.Date).Days;
+                double totalHours = (end - start).TotalHours;
+                int days = (int)Math.Ceiling(totalHours / 24.0);
                 if (days <= 0) days = 1;
 
                 decimal subTotal = dailyRate * qty * days;
-                txtSubTotal.Text = subTotal.ToString("F2");
+
+                if (txtSubTotal != null)
+                {
+                    txtSubTotal.Text = subTotal.ToString("F2");
+                }
 
                 CalculateBalance();
             }
@@ -286,17 +368,26 @@ namespace FinalProject
 
         private void CalculateBalance()
         {
+            if (txtSubTotal == null || txtBalanceDue == null) return;
+
             if (!decimal.TryParse(txtSubTotal.Text, out decimal subTotal)) subTotal = 0;
 
-            string rawPaidText = txtAmountPaid.Text.Trim();
+            decimal deposit = 0;
+            if (numDeposit != null)
+            {
+                deposit = numDeposit.Value;
+            }
+
+            string rawPaidText = txtAmountPaid != null ? txtAmountPaid.Text.Trim() : "0.00";
             decimal amountPaid = 0;
+
             if (!string.IsNullOrWhiteSpace(rawPaidText) && !decimal.TryParse(rawPaidText, out amountPaid))
             {
                 txtBalanceDue.Text = "Invalid Amount";
                 return;
             }
 
-            decimal balanceDue = subTotal - amountPaid;
+            decimal balanceDue = (subTotal + deposit) - amountPaid;
             if (balanceDue < 0) balanceDue = 0;
 
             txtBalanceDue.Text = balanceDue.ToString("F2");
@@ -307,17 +398,17 @@ namespace FinalProject
             string searchName = cmbCustomerName.Text.Trim();
             if (string.IsNullOrWhiteSpace(searchName) || searchName == "Name")
             {
-                MessageBox.Show("Please enter a partial or complete customer name to filter results.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a customer name to search.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "SELECT CustomerID, Name FROM Customers WHERE Name LIKE @SearchName ORDER BY Name ASC;";
+            string query = "SELECT CustomerID, Name FROM Customers WHERE Name LIKE '%' + @SearchName + '%' ORDER BY Name ASC;";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@SearchName", "%" + searchName + "%");
+                    cmd.Parameters.AddWithValue("@SearchName", searchName);
                     try
                     {
                         conn.Open();
@@ -334,12 +425,12 @@ namespace FinalProject
                         }
                         else
                         {
-                            MessageBox.Show("No matching customer accounts found.", "No Results", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("No matching customers found.", "No Results", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Search query failed: " + ex.Message, "System Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Search failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -349,20 +440,20 @@ namespace FinalProject
         {
             if (cmbCustomerName.SelectedIndex == -1 || cmbCustomerName.SelectedValue == null)
             {
-                MessageBox.Show("Transaction Rejected: Please select a valid verified customer from the dropdown search filter list.", "Input Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a customer from the list.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (cmbItem.SelectedIndex == -1 || cmbItem.SelectedValue == null)
             {
-                MessageBox.Show("Transaction Rejected: Please select an inventory item to proceed.", "Input Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select an item from the list.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             int quantity = (int)numQuantity.Value;
             if (quantity <= 0)
             {
-                MessageBox.Show("Transaction Rejected: Rental item quantity must be at least 1 unit.", "Input Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Quantity must be 1 or more.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -370,14 +461,14 @@ namespace FinalProject
             DateTime finalEndDateTime = GetCombinedEndDateTime();
             if (finalEndDateTime < finalStartDateTime)
             {
-                MessageBox.Show("Transaction Rejected: Return deadline timestamp cannot be scheduled earlier than the rental start date.", "Chronological Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Return date cannot be earlier than the start date.", "Date Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (!decimal.TryParse(txtSubTotal.Text, out decimal totalAmount)) totalAmount = 0;
             decimal amountPaid = 0;
             if (!string.IsNullOrWhiteSpace(txtAmountPaid.Text) && !decimal.TryParse(txtAmountPaid.Text.Trim(), out amountPaid))
             {
-                MessageBox.Show("Transaction Rejected: Amount Paid box can only accept numerical digits and fractional decimals.", "Format Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid number for amount paid.", "Format Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -400,7 +491,7 @@ namespace FinalProject
 
                         if (available < quantity)
                         {
-                            MessageBox.Show($"Transaction Aborted: Insufficient stock available. Only {available} unit(s) remain in inventory.", "Overdraft Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"Not enough stock. Only {available} remaining.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             transaction.Rollback();
                             return;
                         }
@@ -409,7 +500,7 @@ namespace FinalProject
                     string insertTxQuery = @"
                         INSERT INTO RentalTransactions (CustomerID, UserID, RentalStartDate, ExpectedReturnDate, TotalAmount, DepositAmount, AmountPaid, PaymentMethod, Status, Notes, CreatedAt)
                         OUTPUT INSERTED.TransactionID
-                        VALUES (@CustomerID, @UserID, @StartDate, @ExpectedReturnDate, @TotalAmount, 0, @AmountPaid, @PaymentMethod, 'Ongoing', @Notes, GETDATE());";
+                        VALUES (@CustomerID, @UserID, @StartDate, @ExpectedReturnDate, @TotalAmount, @DepositAmount, @AmountPaid, @PaymentMethod, 'Ongoing', @Notes, GETDATE());";
 
                     int newTransactionId;
                     using (SqlCommand cmd = new SqlCommand(insertTxQuery, conn, transaction))
@@ -419,6 +510,7 @@ namespace FinalProject
                         cmd.Parameters.AddWithValue("@StartDate", finalStartDateTime);
                         cmd.Parameters.AddWithValue("@ExpectedReturnDate", finalEndDateTime);
                         cmd.Parameters.AddWithValue("@TotalAmount", totalAmount);
+                        cmd.Parameters.AddWithValue("@DepositAmount", numDeposit != null ? numDeposit.Value : 0);
                         cmd.Parameters.AddWithValue("@AmountPaid", amountPaid);
                         cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
                         cmd.Parameters.AddWithValue("@Notes", txtNotes.Text.Trim());
@@ -468,7 +560,7 @@ namespace FinalProject
                     }
 
                     transaction.Commit();
-                    MessageBox.Show("Rental contract opened and validated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Rental transaction saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     RefreshSummaryPanels();
                     LoadDataGrids();
@@ -478,7 +570,7 @@ namespace FinalProject
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("Critical Write Fault: Rollback triggered safely. Reason: " + ex.Message, "Execution Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to save transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -492,14 +584,15 @@ namespace FinalProject
         {
             cmbCustomerName.SelectedIndex = -1;
             cmbItem.SelectedIndex = -1;
-            numQuantity.Value = 0;
+            if (numQuantity != null) numQuantity.Value = 1;
+            if (numDeposit != null) numDeposit.Value = 0;
             txtNotes.Text = string.Empty;
             rbCash.Checked = true;
 
             dtpStartDate.Value = DateTime.Now;
             dtpStartTime.Value = DateTime.Now;
-            dtpExpectedReturnDate.Value = DateTime.Now.AddDays(1);
-            dtpExpectedReturnTime.Value = DateTime.Now;
+            dtpExpectedReturnDate.Value = DateTime.Now;
+            dtpExpectedReturnTime.Value = DateTime.Now.AddDays(1);
 
             txtDailyRate.Text = "0.00";
             txtSubTotal.Text = "0.00";
@@ -521,10 +614,37 @@ namespace FinalProject
             dashboard.Show();
             this.Dispose();
         }
+
         private void btnHome_Click(object sender, EventArgs e)
         {
             ReturnToDashboard();
         }
 
+        private void btnCalendar_Click(object sender, EventArgs e)
+        {
+            if (pbUserImage != null && pbUserImage.Image != null)
+            {
+                pbUserImage.Image.Dispose();
+                pbUserImage.Image = null;
+            }
+
+            this.Hide();
+            Calendar calendarForm = new Calendar(this.currentLoggedInUserId);
+            calendarForm.Show();
+            this.Dispose();
+        }
+
+        private void btnInventoryManagement_Click(object sender, EventArgs e)
+        {
+            if (pbUserImage != null && pbUserImage.Image != null)
+            {
+                pbUserImage.Image.Dispose();
+                pbUserImage.Image = null;
+            }
+            this.Hide();
+            Inventory_Management inventoryForm = new Inventory_Management(this.currentLoggedInUserId);
+            inventoryForm.Show();
+            this.Dispose();
+        }
     }
 }
