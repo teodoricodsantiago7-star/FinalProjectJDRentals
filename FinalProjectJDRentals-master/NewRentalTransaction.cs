@@ -646,5 +646,30 @@ namespace FinalProject
             inventoryForm.Show();
             this.Dispose();
         }
+
+        private void btnRecords_Click(object sender, EventArgs e)
+        {
+            if (pbUserImage != null && pbUserImage.Image != null)
+            {
+                pbUserImage.Image.Dispose();
+                pbUserImage.Image = null;
+            }
+            this.FormClosed -= (s, a) => Application.Exit();
+            Customer_Records recordsForm = new Customer_Records(this.currentLoggedInUserId);
+            recordsForm.FormClosed += (s, a) => Application.Exit();
+            this.Hide();
+            recordsForm.Show();
+            this.Dispose();
+        }
+
+        private void btnBookingManagement_Click(object sender, EventArgs e)
+        {
+            this.FormClosed -= (s, a) => Application.Exit();
+            Booking_Management bookingForm = new Booking_Management(this.currentLoggedInUserId);
+            bookingForm.FormClosed += (s, a) => Application.Exit();
+            this.Hide();
+            bookingForm.Show();
+            this.Dispose();
+        }
     }
 }

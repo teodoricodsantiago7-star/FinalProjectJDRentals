@@ -32,9 +32,9 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.btnBookingManagement = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
+            this.btnRecords = new System.Windows.Forms.Button();
             this.btnCalendar = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
             this.btnNewRentalTransaction = new System.Windows.Forms.Button();
@@ -79,9 +79,9 @@
             this.panel1.BackColor = System.Drawing.Color.Sienna;
             this.panel1.Controls.Add(this.button10);
             this.panel1.Controls.Add(this.button9);
-            this.panel1.Controls.Add(this.button8);
+            this.panel1.Controls.Add(this.btnBookingManagement);
             this.panel1.Controls.Add(this.button11);
-            this.panel1.Controls.Add(this.button12);
+            this.panel1.Controls.Add(this.btnRecords);
             this.panel1.Controls.Add(this.btnCalendar);
             this.panel1.Controls.Add(this.button14);
             this.panel1.Controls.Add(this.btnNewRentalTransaction);
@@ -126,21 +126,22 @@
             this.button9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button9.UseVisualStyleBackColor = false;
             // 
-            // button8
+            // btnBookingManagement
             // 
-            this.button8.BackColor = System.Drawing.Color.Sienna;
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button8.Location = new System.Drawing.Point(-1, 299);
-            this.button8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(191, 28);
-            this.button8.TabIndex = 90;
-            this.button8.Text = "  Booking Management";
-            this.button8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button8.UseVisualStyleBackColor = false;
+            this.btnBookingManagement.BackColor = System.Drawing.Color.Sienna;
+            this.btnBookingManagement.FlatAppearance.BorderSize = 0;
+            this.btnBookingManagement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBookingManagement.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBookingManagement.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnBookingManagement.Location = new System.Drawing.Point(-1, 299);
+            this.btnBookingManagement.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnBookingManagement.Name = "btnBookingManagement";
+            this.btnBookingManagement.Size = new System.Drawing.Size(191, 28);
+            this.btnBookingManagement.TabIndex = 90;
+            this.btnBookingManagement.Text = "  Booking Management";
+            this.btnBookingManagement.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnBookingManagement.UseVisualStyleBackColor = false;
+            this.btnBookingManagement.Click += new System.EventHandler(this.btnBookingManagement_Click);
             // 
             // button11
             // 
@@ -158,21 +159,22 @@
             this.button11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button11.UseVisualStyleBackColor = false;
             // 
-            // button12
+            // btnRecords
             // 
-            this.button12.BackColor = System.Drawing.Color.Sienna;
-            this.button12.FlatAppearance.BorderSize = 0;
-            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button12.Location = new System.Drawing.Point(0, 271);
-            this.button12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(191, 28);
-            this.button12.TabIndex = 88;
-            this.button12.Text = "  Records\r\n";
-            this.button12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button12.UseVisualStyleBackColor = false;
+            this.btnRecords.BackColor = System.Drawing.Color.Sienna;
+            this.btnRecords.FlatAppearance.BorderSize = 0;
+            this.btnRecords.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRecords.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRecords.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnRecords.Location = new System.Drawing.Point(0, 271);
+            this.btnRecords.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnRecords.Name = "btnRecords";
+            this.btnRecords.Size = new System.Drawing.Size(191, 28);
+            this.btnRecords.TabIndex = 88;
+            this.btnRecords.Text = "  Records\r\n";
+            this.btnRecords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRecords.UseVisualStyleBackColor = false;
+            this.btnRecords.Click += new System.EventHandler(this.btnRecords_Click);
             // 
             // btnCalendar
             // 
@@ -463,9 +465,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button btnBookingManagement;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button btnRecords;
         private System.Windows.Forms.Button btnCalendar;
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.Button btnNewRentalTransaction;

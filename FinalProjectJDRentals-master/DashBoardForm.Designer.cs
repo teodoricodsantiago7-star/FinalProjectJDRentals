@@ -36,9 +36,9 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.btnBookingManagement = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
+            this.btnRecords = new System.Windows.Forms.Button();
             this.btnCalendar = new System.Windows.Forms.Button();
             this.btnInventoryManagement = new System.Windows.Forms.Button();
             this.btnNewRentalTransaction = new System.Windows.Forms.Button();
@@ -59,16 +59,16 @@
             this.label10 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
-            this.lblUpcomingBookingsVal = new System.Windows.Forms.Label();
+            this.cmbUpcomingBookingsDropdown = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
-            this.lblOverdueReturnsVal = new System.Windows.Forms.Label();
+            this.cmbOverdueReturnsDropdown = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
-            this.lblDamagedItemsVal = new System.Windows.Forms.Label();
+            this.cmbDamagedItemsDropdown = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
-            this.lblLowStockVal = new System.Windows.Forms.Label();
+            this.cmbLowStockDropdown = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -122,9 +122,9 @@
             this.panel1.BackColor = System.Drawing.Color.Sienna;
             this.panel1.Controls.Add(this.button10);
             this.panel1.Controls.Add(this.button9);
-            this.panel1.Controls.Add(this.button8);
+            this.panel1.Controls.Add(this.btnBookingManagement);
             this.panel1.Controls.Add(this.button11);
-            this.panel1.Controls.Add(this.button12);
+            this.panel1.Controls.Add(this.btnRecords);
             this.panel1.Controls.Add(this.btnCalendar);
             this.panel1.Controls.Add(this.btnInventoryManagement);
             this.panel1.Controls.Add(this.btnNewRentalTransaction);
@@ -169,21 +169,22 @@
             this.button9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button9.UseVisualStyleBackColor = false;
             // 
-            // button8
+            // btnBookingManagement
             // 
-            this.button8.BackColor = System.Drawing.Color.Sienna;
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button8.Location = new System.Drawing.Point(-1, 299);
-            this.button8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(191, 28);
-            this.button8.TabIndex = 81;
-            this.button8.Text = "  Booking Management";
-            this.button8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button8.UseVisualStyleBackColor = false;
+            this.btnBookingManagement.BackColor = System.Drawing.Color.Sienna;
+            this.btnBookingManagement.FlatAppearance.BorderSize = 0;
+            this.btnBookingManagement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBookingManagement.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBookingManagement.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnBookingManagement.Location = new System.Drawing.Point(-1, 299);
+            this.btnBookingManagement.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnBookingManagement.Name = "btnBookingManagement";
+            this.btnBookingManagement.Size = new System.Drawing.Size(191, 28);
+            this.btnBookingManagement.TabIndex = 81;
+            this.btnBookingManagement.Text = "  Booking Management";
+            this.btnBookingManagement.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnBookingManagement.UseVisualStyleBackColor = false;
+            this.btnBookingManagement.Click += new System.EventHandler(this.btnBookingManagement_Click);
             // 
             // button11
             // 
@@ -201,21 +202,22 @@
             this.button11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button11.UseVisualStyleBackColor = false;
             // 
-            // button12
+            // btnRecords
             // 
-            this.button12.BackColor = System.Drawing.Color.Sienna;
-            this.button12.FlatAppearance.BorderSize = 0;
-            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button12.Location = new System.Drawing.Point(0, 271);
-            this.button12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(191, 28);
-            this.button12.TabIndex = 79;
-            this.button12.Text = "  Records\r\n";
-            this.button12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button12.UseVisualStyleBackColor = false;
+            this.btnRecords.BackColor = System.Drawing.Color.Sienna;
+            this.btnRecords.FlatAppearance.BorderSize = 0;
+            this.btnRecords.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRecords.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRecords.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnRecords.Location = new System.Drawing.Point(0, 271);
+            this.btnRecords.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnRecords.Name = "btnRecords";
+            this.btnRecords.Size = new System.Drawing.Size(191, 28);
+            this.btnRecords.TabIndex = 79;
+            this.btnRecords.Text = "  Records\r\n";
+            this.btnRecords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRecords.UseVisualStyleBackColor = false;
+            this.btnRecords.Click += new System.EventHandler(this.btnRecords_Click);
             // 
             // btnCalendar
             // 
@@ -448,23 +450,22 @@
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.Color.Ivory;
-            this.panel8.Controls.Add(this.lblUpcomingBookingsVal);
+            this.panel8.Controls.Add(this.cmbUpcomingBookingsDropdown);
             this.panel8.Controls.Add(this.label13);
-            this.panel8.Location = new System.Drawing.Point(15, 90);
+            this.panel8.Location = new System.Drawing.Point(15, 113);
             this.panel8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(209, 54);
+            this.panel8.Size = new System.Drawing.Size(209, 71);
             this.panel8.TabIndex = 46;
             // 
-            // lblUpcomingBookingsVal
+            // cmbUpcomingBookingsDropdown
             // 
-            this.lblUpcomingBookingsVal.AutoSize = true;
-            this.lblUpcomingBookingsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUpcomingBookingsVal.Location = new System.Drawing.Point(28, 26);
-            this.lblUpcomingBookingsVal.Name = "lblUpcomingBookingsVal";
-            this.lblUpcomingBookingsVal.Size = new System.Drawing.Size(85, 18);
-            this.lblUpcomingBookingsVal.TabIndex = 45;
-            this.lblUpcomingBookingsVal.Text = "3 tomorrow";
+            this.cmbUpcomingBookingsDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbUpcomingBookingsDropdown.FormattingEnabled = true;
+            this.cmbUpcomingBookingsDropdown.Location = new System.Drawing.Point(20, 37);
+            this.cmbUpcomingBookingsDropdown.Name = "cmbUpcomingBookingsDropdown";
+            this.cmbUpcomingBookingsDropdown.Size = new System.Drawing.Size(170, 24);
+            this.cmbUpcomingBookingsDropdown.TabIndex = 46;
             // 
             // label13
             // 
@@ -479,23 +480,22 @@
             // panel9
             // 
             this.panel9.BackColor = System.Drawing.Color.Ivory;
-            this.panel9.Controls.Add(this.lblOverdueReturnsVal);
+            this.panel9.Controls.Add(this.cmbOverdueReturnsDropdown);
             this.panel9.Controls.Add(this.label14);
-            this.panel9.Location = new System.Drawing.Point(15, 150);
+            this.panel9.Location = new System.Drawing.Point(15, 194);
             this.panel9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(209, 54);
+            this.panel9.Size = new System.Drawing.Size(209, 71);
             this.panel9.TabIndex = 46;
             // 
-            // lblOverdueReturnsVal
+            // cmbOverdueReturnsDropdown
             // 
-            this.lblOverdueReturnsVal.AutoSize = true;
-            this.lblOverdueReturnsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOverdueReturnsVal.Location = new System.Drawing.Point(28, 26);
-            this.lblOverdueReturnsVal.Name = "lblOverdueReturnsVal";
-            this.lblOverdueReturnsVal.Size = new System.Drawing.Size(48, 18);
-            this.lblOverdueReturnsVal.TabIndex = 46;
-            this.lblOverdueReturnsVal.Text = "1 item";
+            this.cmbOverdueReturnsDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOverdueReturnsDropdown.FormattingEnabled = true;
+            this.cmbOverdueReturnsDropdown.Location = new System.Drawing.Point(20, 34);
+            this.cmbOverdueReturnsDropdown.Name = "cmbOverdueReturnsDropdown";
+            this.cmbOverdueReturnsDropdown.Size = new System.Drawing.Size(170, 24);
+            this.cmbOverdueReturnsDropdown.TabIndex = 47;
             // 
             // label14
             // 
@@ -510,23 +510,22 @@
             // panel10
             // 
             this.panel10.BackColor = System.Drawing.Color.Ivory;
-            this.panel10.Controls.Add(this.lblDamagedItemsVal);
+            this.panel10.Controls.Add(this.cmbDamagedItemsDropdown);
             this.panel10.Controls.Add(this.label15);
-            this.panel10.Location = new System.Drawing.Point(15, 209);
+            this.panel10.Location = new System.Drawing.Point(15, 275);
             this.panel10.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(209, 54);
+            this.panel10.Size = new System.Drawing.Size(209, 71);
             this.panel10.TabIndex = 46;
             // 
-            // lblDamagedItemsVal
+            // cmbDamagedItemsDropdown
             // 
-            this.lblDamagedItemsVal.AutoSize = true;
-            this.lblDamagedItemsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDamagedItemsVal.Location = new System.Drawing.Point(33, 27);
-            this.lblDamagedItemsVal.Name = "lblDamagedItemsVal";
-            this.lblDamagedItemsVal.Size = new System.Drawing.Size(17, 18);
-            this.lblDamagedItemsVal.TabIndex = 44;
-            this.lblDamagedItemsVal.Text = "0";
+            this.cmbDamagedItemsDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDamagedItemsDropdown.FormattingEnabled = true;
+            this.cmbDamagedItemsDropdown.Location = new System.Drawing.Point(21, 35);
+            this.cmbDamagedItemsDropdown.Name = "cmbDamagedItemsDropdown";
+            this.cmbDamagedItemsDropdown.Size = new System.Drawing.Size(170, 24);
+            this.cmbDamagedItemsDropdown.TabIndex = 48;
             // 
             // label15
             // 
@@ -541,23 +540,22 @@
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.Ivory;
-            this.panel7.Controls.Add(this.lblLowStockVal);
+            this.panel7.Controls.Add(this.cmbLowStockDropdown);
             this.panel7.Controls.Add(this.label12);
-            this.panel7.Location = new System.Drawing.Point(15, 31);
+            this.panel7.Location = new System.Drawing.Point(15, 32);
             this.panel7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(209, 54);
+            this.panel7.Size = new System.Drawing.Size(209, 71);
             this.panel7.TabIndex = 45;
             // 
-            // lblLowStockVal
+            // cmbLowStockDropdown
             // 
-            this.lblLowStockVal.AutoSize = true;
-            this.lblLowStockVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLowStockVal.Location = new System.Drawing.Point(28, 30);
-            this.lblLowStockVal.Name = "lblLowStockVal";
-            this.lblLowStockVal.Size = new System.Drawing.Size(96, 18);
-            this.lblLowStockVal.TabIndex = 44;
-            this.lblLowStockVal.Text = "Chairs (2 left)";
+            this.cmbLowStockDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLowStockDropdown.FormattingEnabled = true;
+            this.cmbLowStockDropdown.Location = new System.Drawing.Point(20, 35);
+            this.cmbLowStockDropdown.Name = "cmbLowStockDropdown";
+            this.cmbLowStockDropdown.Size = new System.Drawing.Size(170, 24);
+            this.cmbLowStockDropdown.TabIndex = 45;
             // 
             // label12
             // 
@@ -742,27 +740,27 @@
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Panel panel10;
-        private System.Windows.Forms.Label lblDamagedItemsVal;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.Label lblLowStockVal;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label lblUpcomingBookingsVal;
-        private System.Windows.Forms.Label lblOverdueReturnsVal;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button btnBookingManagement;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button btnRecords;
         private System.Windows.Forms.Button btnCalendar;
         private System.Windows.Forms.Button btnInventoryManagement;
         private System.Windows.Forms.Button btnNewRentalTransaction;
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label UserNameHeader;
+        private System.Windows.Forms.ComboBox cmbLowStockDropdown;
+        private System.Windows.Forms.ComboBox cmbUpcomingBookingsDropdown;
+        private System.Windows.Forms.ComboBox cmbOverdueReturnsDropdown;
+        private System.Windows.Forms.ComboBox cmbDamagedItemsDropdown;
     }
 }

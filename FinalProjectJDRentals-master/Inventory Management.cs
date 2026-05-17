@@ -138,7 +138,24 @@ namespace FinalProject
 
             int itemId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["ItemID"].Value);
             string currentStatus = dataGridView1.Rows[e.RowIndex].Cells["Status"].Value.ToString();
-            string newStatus = currentStatus == "Available" ? "Maintenance" : "Available";
+            string newStatus = "Available";
+
+            if (currentStatus == "Available")
+            {
+                newStatus = "Maintenance";
+            }
+            else if (currentStatus == "Maintenance")
+            {
+                newStatus = "Fully Booked";
+            }
+            else if (currentStatus == "Fully Booked")
+            {
+                newStatus = "Available";
+            }
+            else
+            {
+                newStatus = "Available";
+            }
 
             string updateQuery = "UPDATE Items SET Status = @NewStatus WHERE ItemID = @ItemID;";
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -450,7 +467,8 @@ namespace FinalProject
                 return;
             }
 
-            string finalStatus = finalAvailQty <= 0 ? "Fully Booked" : "Available";
+            int finalStatusTotal = finalAvailQty;
+            string finalStatus = finalStatusTotal <= 0 ? "Fully Booked" : "Available";
 
             string updateQuery = @"
                 UPDATE Items 
@@ -494,9 +512,37 @@ namespace FinalProject
                 pbUserProfilePic.Image.Dispose();
                 pbUserProfilePic.Image = null;
             }
+            this.FormClosed -= (s, a) => Application.Exit();
+            targetForm.FormClosed += (s, a) => Application.Exit();
             this.Hide();
             targetForm.Show();
             this.Dispose();
         }
+
+        private void btnRecords_Click(object sender, EventArgs e)
+        {
+            if (pbUserProfilePic != null && pbUserProfilePic.Image != null)
+            {
+                pbUserProfilePic.Image.Dispose();
+                pbUserProfilePic.Image = null;
+            }
+            this.FormClosed -= (s, a) => Application.Exit();
+            Customer_Records recordsForm = new Customer_Records(this.currentLoggedInUserId);
+            recordsForm.FormClosed += (s, a) => Application.Exit();
+            this.Hide();
+            recordsForm.Show();
+            this.Dispose();
+        }
+
+        private void btnBookingManagement_Click(object sender, EventArgs e)
+        {
+            this.FormClosed -= (s, a) => Application.Exit();
+            Booking_Management bookingForm = new Booking_Management(this.currentLoggedInUserId);
+            bookingForm.FormClosed += (s, a) => Application.Exit();
+            this.Hide();
+            bookingForm.Show();
+            this.Dispose();
+        }
+
     }
 }
