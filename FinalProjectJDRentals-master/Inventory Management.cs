@@ -39,7 +39,7 @@ namespace FinalProject
 
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ReadOnly = false;
+            dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -62,17 +62,6 @@ namespace FinalProject
             dataGridView1.Columns.Add(rateCol);
 
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Status", HeaderText = "Status", DataPropertyName = "Status", ReadOnly = true });
-
-            var actionButtonCol = new DataGridViewButtonColumn
-            {
-                Name = "Action",
-                HeaderText = "Action",
-                Text = "Toggle Status",
-                UseColumnTextForButtonValue = true
-            };
-            dataGridView1.Columns.Add(actionButtonCol);
-
-            dataGridView1.CellContentClick += DataGridView1_CellContentClick;
         }
 
         private void RefreshInventoryData()
@@ -114,67 +103,17 @@ namespace FinalProject
                 if (status == "Maintenance")
                 {
                     row.DefaultCellStyle.BackColor = Color.Bisque;
+                    row.DefaultCellStyle.ForeColor = Color.Black;
                 }
                 else if (status == "Fully Booked")
                 {
                     row.DefaultCellStyle.BackColor = Color.MistyRose;
-                }
-                else if (status == "Discontinued")
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightGray;
-                    row.DefaultCellStyle.ForeColor = Color.DarkGray;
+                    row.DefaultCellStyle.ForeColor = Color.Black;
                 }
                 else
                 {
                     row.DefaultCellStyle.BackColor = Color.White;
                     row.DefaultCellStyle.ForeColor = Color.Black;
-                }
-            }
-        }
-
-        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0 || e.ColumnIndex != dataGridView1.Columns["Action"].Index) return;
-
-            int itemId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["ItemID"].Value);
-            string currentStatus = dataGridView1.Rows[e.RowIndex].Cells["Status"].Value.ToString();
-            string newStatus = "Available";
-
-            if (currentStatus == "Available")
-            {
-                newStatus = "Maintenance";
-            }
-            else if (currentStatus == "Maintenance")
-            {
-                newStatus = "Fully Booked";
-            }
-            else if (currentStatus == "Fully Booked")
-            {
-                newStatus = "Available";
-            }
-            else
-            {
-                newStatus = "Available";
-            }
-
-            string updateQuery = "UPDATE Items SET Status = @NewStatus WHERE ItemID = @ItemID;";
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
-                {
-                    cmd.Parameters.AddWithValue("@NewStatus", newStatus);
-                    cmd.Parameters.AddWithValue("@ItemID", itemId);
-
-                    try
-                    {
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        RefreshInventoryData();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Failed to alter item status: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
                 }
             }
         }
@@ -382,124 +321,103 @@ namespace FinalProject
             string oldName = dataGridView1.SelectedRows[0].Cells["ItemName"].Value.ToString();
             int oldTotalQty = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["TotalQuantity"].Value);
             int oldAvailQty = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["AvailableQuantity"].Value);
+            string oldStatus = dataGridView1.SelectedRows[0].Cells["Status"].Value.ToString();
             decimal oldRate = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["DailyRate"].Value);
 
-            Form namePrompt = new Form() { Width = 400, Height = 150, FormBorderStyle = FormBorderStyle.FixedDialog, Text = "Edit Item", StartPosition = FormStartPosition.CenterParent, MaximizeBox = false, MinimizeBox = false };
-            Label lblName = new Label() { Left = 20, Top = 20, Width = 350, Text = "Change item name:" };
-            TextBox txtName = new TextBox() { Left = 20, Top = 45, Width = 340, Text = oldName };
-            Button btnNameOk = new Button() { Text = "OK", Left = 280, Width = 80, Top = 80, DialogResult = DialogResult.OK };
-            namePrompt.Controls.Add(lblName); namePrompt.Controls.Add(txtName); namePrompt.Controls.Add(btnNameOk);
-            namePrompt.AcceptButton = btnNameOk;
-
-            if (namePrompt.ShowDialog() != DialogResult.OK) return;
-            string newName = txtName.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(newName))
+            Form editForm = new Form()
             {
-                MessageBox.Show("Item name cannot be empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (newName.Length > 100)
+                Width = 420,
+                Height = 340,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = "Edit Item Details",
+                StartPosition = FormStartPosition.CenterParent,
+                MaximizeBox = false,
+                MinimizeBox = false
+            };
+
+            Label lblName = new Label { Text = "Item Name:", Location = new Point(20, 20), Size = new Size(120, 20) };
+            TextBox txtName = new TextBox { Text = oldName, Location = new Point(150, 20), Size = new Size(220, 20) };
+
+            Label lblTotal = new Label { Text = "Total Quantity:", Location = new Point(20, 60), Size = new Size(120, 20) };
+            NumericUpDown numTotal = new NumericUpDown { Minimum = 0, Maximum = 99999, Value = oldTotalQty, Location = new Point(150, 60), Size = new Size(220, 20) };
+
+            Label lblAvailable = new Label { Text = "Available Items:", Location = new Point(20, 100), Size = new Size(120, 20) };
+            NumericUpDown numAvailable = new NumericUpDown { Minimum = 0, Maximum = 99999, Value = oldAvailQty, Location = new Point(150, 100), Size = new Size(220, 20) };
+
+            Label lblRate = new Label { Text = "Daily Rate (₱):", Location = new Point(20, 140), Size = new Size(120, 20) };
+            NumericUpDown numRate = new NumericUpDown { Minimum = 0, Maximum = 1000000, DecimalPlaces = 2, Value = oldRate, Location = new Point(150, 140), Size = new Size(220, 20) };
+
+            Label lblStatus = new Label { Text = "Status:", Location = new Point(20, 180), Size = new Size(120, 20) };
+            ComboBox cmbStatus = new ComboBox { Location = new Point(150, 180), Size = new Size(220, 20), DropDownStyle = ComboBoxStyle.DropDownList };
+            cmbStatus.Items.AddRange(new string[] { "Available", "Fully Booked", "Maintenance" });
+            cmbStatus.SelectedItem = cmbStatus.Items.Contains(oldStatus) ? oldStatus : "Available";
+
+            Button btnSave = new Button { Text = "Save Changes", Location = new Point(150, 230), Size = new Size(100, 30), DialogResult = DialogResult.OK };
+            Button btnCancel = new Button { Text = "Cancel", Location = new Point(270, 230), Size = new Size(100, 30), DialogResult = DialogResult.Cancel };
+
+            editForm.Controls.AddRange(new Control[] { lblName, txtName, lblTotal, numTotal, lblAvailable, numAvailable, lblRate, numRate, lblStatus, cmbStatus, btnSave, btnCancel });
+            editForm.AcceptButton = btnSave;
+
+            if (editForm.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Item name is too long (max 100 letters).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (IsItemNameDuplicate(newName, itemId))
-            {
-                MessageBox.Show("This item name already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                string newName = txtName.Text.Trim();
+                int finalTotalQty = (int)numTotal.Value;
+                int finalAvailQty = (int)numAvailable.Value;
+                decimal newRate = numRate.Value;
+                string finalStatus = cmbStatus.SelectedItem.ToString();
 
-            Form ratePrompt = new Form() { Width = 400, Height = 150, FormBorderStyle = FormBorderStyle.FixedDialog, Text = "Edit Item", StartPosition = FormStartPosition.CenterParent, MaximizeBox = false, MinimizeBox = false };
-            Label lblRate = new Label() { Left = 20, Top = 20, Width = 350, Text = "Change daily rate (₱):" };
-            TextBox txtRate = new TextBox() { Left = 20, Top = 45, Width = 340, Text = oldRate.ToString("F2") };
-            Button btnRateOk = new Button() { Text = "OK", Left = 280, Width = 80, Top = 80, DialogResult = DialogResult.OK };
-            ratePrompt.Controls.Add(lblRate); ratePrompt.Controls.Add(txtRate); ratePrompt.Controls.Add(btnRateOk);
-            ratePrompt.AcceptButton = btnRateOk;
-
-            if (ratePrompt.ShowDialog() != DialogResult.OK) return;
-
-            if (!decimal.TryParse(txtRate.Text.Trim(), out decimal newRate) || newRate < 0)
-            {
-                MessageBox.Show("Please enter a valid price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            Form adjustQtyPrompt = new Form() { Width = 420, Height = 170, FormBorderStyle = FormBorderStyle.FixedDialog, Text = "Adjust Stock", StartPosition = FormStartPosition.CenterParent, MaximizeBox = false, MinimizeBox = false };
-            Label lblAdjust = new Label() { Left = 20, Top = 15, Width = 380, Height = 40, Text = "Add or remove stock units:\n(Example: +5 to add stock, -2 to reduce stock)" };
-            TextBox txtAdjust = new TextBox() { Left = 20, Top = 60, Width = 360, Text = "0" };
-            Button btnAdjustOk = new Button() { Text = "OK", Left = 300, Width = 80, Top = 100, DialogResult = DialogResult.OK };
-            adjustQtyPrompt.Controls.Add(lblAdjust); adjustQtyPrompt.Controls.Add(txtAdjust); adjustQtyPrompt.Controls.Add(btnAdjustOk);
-            adjustQtyPrompt.AcceptButton = btnAdjustOk;
-
-            if (adjustQtyPrompt.ShowDialog() != DialogResult.OK) return;
-
-            string rawInput = txtAdjust.Text.Trim();
-            bool isNegative = false;
-
-            if (rawInput.StartsWith("-"))
-            {
-                isNegative = true;
-                rawInput = rawInput.Substring(1).Trim();
-            }
-            else if (rawInput.StartsWith("+"))
-            {
-                rawInput = rawInput.Substring(1).Trim();
-            }
-
-            if (!int.TryParse(rawInput, out int adjustmentQty) || adjustmentQty < 0)
-            {
-                MessageBox.Show("Please enter a valid whole number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (isNegative)
-            {
-                adjustmentQty = -adjustmentQty;
-            }
-
-            int finalTotalQty = oldTotalQty + adjustmentQty;
-            int finalAvailQty = oldAvailQty + adjustmentQty;
-
-            if (finalTotalQty < 0 || finalAvailQty < 0)
-            {
-                MessageBox.Show("Stock quantity cannot go below 0.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            int finalStatusTotal = finalAvailQty;
-            string finalStatus = finalStatusTotal <= 0 ? "Fully Booked" : "Available";
-
-            string updateQuery = @"
-                UPDATE Items 
-                SET ItemName = @ItemName, 
-                    DailyRate = @DailyRate, 
-                    TotalQuantity = @TotalQty, 
-                    AvailableQuantity = @AvailQty,
-                    Status = CASE WHEN Status <> 'Maintenance' AND Status <> 'Discontinued' THEN @Status ELSE Status END
-                WHERE ItemID = @ItemID;";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
+                if (string.IsNullOrWhiteSpace(newName))
                 {
-                    cmd.Parameters.AddWithValue("@ItemName", newName);
-                    cmd.Parameters.AddWithValue("@DailyRate", newRate);
-                    cmd.Parameters.AddWithValue("@TotalQty", finalTotalQty);
-                    cmd.Parameters.AddWithValue("@AvailQty", finalAvailQty);
-                    cmd.Parameters.AddWithValue("@Status", finalStatus);
-                    cmd.Parameters.AddWithValue("@ItemID", itemId);
+                    MessageBox.Show("Item name cannot be empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (IsItemNameDuplicate(newName, itemId))
+                {
+                    MessageBox.Show("This item name already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (finalAvailQty > finalTotalQty)
+                {
+                    MessageBox.Show("Available quantity cannot exceed total quantity.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    try
+                if (finalStatus != "Maintenance")
+                {
+                    finalStatus = finalAvailQty <= 0 ? "Fully Booked" : "Available";
+                }
+
+                string updateQuery = @"
+                    UPDATE Items 
+                    SET ItemName = @ItemName, 
+                        DailyRate = @DailyRate, 
+                        TotalQuantity = @TotalQty, 
+                        AvailableQuantity = @AvailQty,
+                        Status = @Status
+                    WHERE ItemID = @ItemID;";
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
                     {
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Item updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        RefreshInventoryData();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Failed to execute update sequence: " + ex.Message, "Execution Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        cmd.Parameters.AddWithValue("@ItemName", newName);
+                        cmd.Parameters.AddWithValue("@DailyRate", newRate);
+                        cmd.Parameters.AddWithValue("@TotalQty", finalTotalQty);
+                        cmd.Parameters.AddWithValue("@AvailQty", finalAvailQty);
+                        cmd.Parameters.AddWithValue("@Status", finalStatus);
+                        cmd.Parameters.AddWithValue("@ItemID", itemId);
+
+                        try
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Item updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            RefreshInventoryData();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Failed to execute update sequence: " + ex.Message, "Execution Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
@@ -536,6 +454,11 @@ namespace FinalProject
 
         private void btnBookingManagement_Click(object sender, EventArgs e)
         {
+            if (pbUserProfilePic != null && pbUserProfilePic.Image != null)
+            {
+                pbUserProfilePic.Image.Dispose();
+                pbUserProfilePic.Image = null;
+            }
             this.FormClosed -= (s, a) => Application.Exit();
             Booking_Management bookingForm = new Booking_Management(this.currentLoggedInUserId);
             bookingForm.FormClosed += (s, a) => Application.Exit();
@@ -543,6 +466,5 @@ namespace FinalProject
             bookingForm.Show();
             this.Dispose();
         }
-
     }
 }
